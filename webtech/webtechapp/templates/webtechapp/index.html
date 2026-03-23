@@ -5,55 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rathinam Grand Fest</title>
     <link rel="website icon" type="jpeg" href="rgf.png">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'webtechstyles/css/style.css' %}">
     <style>
-        .re{
-          margin-left: 82.5%;
-          border:1px solid white;
-          padding: 8px;
-          color: white;
-          font-weight: bold;
-          border-radius: 5px;
-          background: transparent;
-          font-size:16px;
-          cursor:pointer;
-          letter-spacing:4px;
-          transition: background-color 0.3s ease;
+        /* ── HERO NAV ── */
+        .hero-nav {
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 24px 40px;
+          z-index: 10;
         }
-        .re:hover{
-          background-color:white;
-          color:black;
-        }
+        .hero-nav .nav-logo { width: 52px; opacity: 0.85; filter: brightness(1.4); }
+        .hero-nav .nav-links { display: flex; gap: 10px; align-items: center; }
 
-        .login,.logout{
-          background:transparent;
-          border:1px solid white;
-          padding:10px;
-          margin-top:1%;
-          border-radius:5px;
-          margin-left:1%;
-          color:white;
-          letter-spacing:3px;
+        .nav-btn {
+          font-family: 'Inter', sans-serif;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          padding: 10px 26px;
+          border-radius: 50px;
+          cursor: pointer;
+          transition: all 0.25s ease;
+          border: 1.5px solid rgba(255,255,255,0.25);
+          outline: none;
+          line-height: 1;
+          background: rgba(255,255,255,0.08);
+          color: #fff;
+          backdrop-filter: blur(8px);
         }
-
-        .logins{
-        display:flex;
+        .nav-btn:hover {
+          background: rgba(255,255,255,0.18);
+          border-color: rgba(255,255,255,0.5);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.3);
         }
-        .stulog{
-            margin-left:85%;
+        .nav-btn.logout-nb {
+          background: rgba(229,62,62,0.3);
+          border-color: rgba(229,62,62,0.6);
+          color: #fca5a5;
         }
-
-    .admin{
-          width:100%;
+        .nav-btn.logout-nb:hover { background: rgba(229,62,62,0.5); }
+        .nav-btn.view-nb {
+          background: rgba(43,108,176,0.35);
+          border-color: rgba(99,179,237,0.5);
+          color: #90cdf4;
         }
+        .hidden { display: none !important; }
+        .admin { width: 100%; }
     .full_page {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgb(167, 161, 161);
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.55);
       color: white;
       display: none;
       justify-content: center;
@@ -61,7 +71,6 @@
       text-align: center;
       z-index: 1000;
       overflow: auto;
-
     }
 
 
@@ -75,60 +84,68 @@
 
         .login-container {
           background: white;
-          padding: 30px;
-          border-radius: 10px;
-          box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-          width: 320px;
+          padding: 36px;
+          border-radius: 16px;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+          width: 340px;
         }
-
         .login-container h2 {
           text-align: center;
-          margin-bottom: 20px;
-          color:black;
-          font-size:20px;
+          margin-bottom: 22px;
+          color: #1a1a1a;
+          font-family: 'Inter', sans-serif;
+          font-size: 14px;
+          letter-spacing: 4px;
+          text-transform: uppercase;
         }
-
         .login-container input[type="text"],
         .login-container input[type="password"] {
           width: 100%;
-          padding: 10px;
-          margin: 8px 0 16px 0;
-          border: 1px solid #ccc;
-          border-radius: 5px;
+          padding: 12px 14px;
+          margin: 6px 0 14px;
+          border: 1.5px solid #e2e8f0;
+          border-radius: 8px;
+          font-family: 'Inter', sans-serif;
+          font-size: 14px;
+          outline: none;
+          transition: border-color 0.2s;
+          text-transform: none;
+          letter-spacing: normal;
           box-sizing: border-box;
         }
-
+        .login-container input:focus { border-color: #1a1a1a; }
         .login-container button {
           width: 100%;
-          padding: 10px;
-          background: #007bff;
+          padding: 13px;
+          background: #1a1a1a;
           color: white;
           border: none;
-          border-radius: 5px;
+          border-radius: 8px;
           cursor: pointer;
+          font-family: 'Inter', sans-serif;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          transition: background 0.2s, transform 0.2s;
         }
-
-        .login-container button:hover {
-          background: #0056b3;
-        }
-
-        .hidden{
-        display:none;
-        }
+        .login-container button:hover { background: #333; transform: translateY(-1px); }
       .welcome {
       position: fixed;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      background-color: #28a745;
+      background: linear-gradient(135deg, #1a1a1a, #333);
       color: white;
-      padding: 100px 100px;
-      border-radius: 8px;
-      font-size: 20px;
-      font-weight:bold;
-      z-index: 20;
+      padding: 40px 60px;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      z-index: 9999;
       animation: fadeIn 0.5s ease forwards;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      letter-spacing: 3px;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translate(-50%, -60%); }
       to { opacity: 1; transform: translate(-50%, -50%); }
@@ -256,20 +273,118 @@
     }
 
     .section:nth-child(1) {
-
       top: 0;
       z-index: 1;
       margin: 0;
-        --x: calc(var(--posX, 0) * 1px);
-        --y: calc(var(--posY, 0) * 1px);
-        background-image:
-            linear-gradient(115deg, rgb(211 255 215), rgb(0 0 0)),
-            radial-gradient(90% 100% at calc(50% + var(--x)) calc(0% + var(--y)), rgb(200 200 200), rgb(022 000 045)),
-            radial-gradient(100% 100% at calc(80% - var(--x)) calc(0% - var(--y)), rgb(250 255 000), rgb(036 000 000)),
-            radial-gradient(150% 210% at calc(100% + var(--x)) calc(0% + var(--y)), rgb(020 175 125), rgb(000 010 255)),
-            radial-gradient(100% 100% at calc(100% - var(--x)) calc(30% - var(--y)), rgb(255 077 000), rgb(000 200 255)),
-            linear-gradient(60deg, rgb(255 000 000), rgb(120 086 255));
-        background-blend-mode: overlay, overlay, difference, difference, difference, normal;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(120,40,200,0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(200,50,50,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 20% 70%, rgba(249,115,22,0.12) 0%, transparent 60%),
+        #09090f;
+    }
+
+    /* ── HERO CONTENT ── */
+    .hero-content {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      text-align: center;
+      padding: 0 20px;
+    }
+    .college-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 10px;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero-title {
+      font-family: 'Masiku', serif;
+      font-size: clamp(80px, 14vw, 200px);
+      line-height: 0.88;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -2px;
+      color: #ffffff;
+      -webkit-text-fill-color: #ffffff;
+      animation: fadeUp 0.85s 0.1s ease both;
+      display: inline-block;
+      text-shadow: 0 0 80px rgba(180, 100, 255, 0.3), 0 2px 40px rgba(0,0,0,0.5);
+    }
+    .hero-subtitle {
+      font-family: 'Masiku', sans-serif;
+      font-size: clamp(12px, 1.8vw, 18px);
+      font-weight: 400;
+      letter-spacing: 14px;
+      color: rgba(255,255,255,0.55);
+      margin-top: 18px;
+      text-transform: uppercase;
+      animation: fadeUp 0.85s 0.2s ease both;
+    }
+    .hero-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin: 22px auto;
+      width: 260px;
+      animation: fadeUp 0.85s 0.3s ease both;
+    }
+    .hero-divider-line { flex:1; height:1px; background:linear-gradient(to right,transparent,rgba(255,255,255,0.2),transparent); }
+    .hero-divider-dot { width:5px; height:5px; border-radius:50%; background:rgba(249,115,22,0.8); }
+    .hero-date {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.85);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 6px;
+      padding: 14px 36px;
+      border-radius: 50px;
+      animation: fadeUp 0.85s 0.4s ease both;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+    }
+    .hero-date .date-dot { width:5px; height:5px; border-radius:50%; background:#f97316; box-shadow:0 0 8px #f97316; }
+    .hero-scroll {
+      position: absolute;
+      bottom: 34px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      animation: fadeUp 0.9s 0.6s ease both;
+    }
+    .hero-scroll span {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 1px; height: 46px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100%{opacity:0.2;} 50%{opacity:0.8;}
+    }
+    .hero-bg-circle { position:absolute; border-radius:50%; pointer-events:none; }
+    @keyframes fadeUp {
+      from{opacity:0;transform:translateY(28px);}
+      to  {opacity:1;transform:translateY(0);}
     }
     .section:nth-child(1) .fixed {
       transform: translate(-50%, -50%);
@@ -954,216 +1069,214 @@
 
 
 
+    /* ── RESPONSIVE DESIGN FOR MOBILE ── */
+    @media (max-width: 768px) {
+      .hero-nav { padding: 16px 20px; justify-content: center; }
+      .nav-links { gap: 8px; }
+      .nav-btn { padding: 8px 18px; font-size: 9px; letter-spacing: 2px; }
+      
+      .hero-title { font-size: clamp(48px, 12vw, 80px); }
+      .college-name { font-size: 9px; letter-spacing: 6px; margin-bottom: 12px; }
+      .hero-subtitle { font-size: 11px; letter-spacing: 8px; margin-top: 12px; }
+      .hero-divider { width: 200px; margin: 16px auto; }
+      .hero-date { font-size: 9px; padding: 10px 24px; letter-spacing: 4px; }
+      
+      .hero-scroll { bottom: 20px; }
+      .scroll-line { height: 30px; }
+      
+      .vibe { font-size: 42px !important; letter-spacing: 4px !important; line-height: 1.2; }
+      .gust { font-size: 42px !important; margin-bottom: 20px; }
+      .last { font-size: 32px !important; width: 90% !important; letter-spacing: 4px !important; }
+      .back h1 { font-size: 28px !important; line-height: 1.3; }
+      
+      .login-container { width: 90%; max-width: 320px; padding: 24px; }
+      .hero-bg-circle.c1 { width: 300px; height: 300px; top: -100px; left: -100px; }
+      .hero-bg-circle.c2 { width: 250px; height: 250px; bottom: -80px; right: -80px; }
+      
+      .profiles { flex-direction: column; gap: 30px; align-items: center; }
+      .avatar { width: 140px; height: 140px; }
+    }
     </style>
 </head>
 <body>
 <div class="section">
-    <div class="logins">
-    <button class="login re stulog" id="stu" onclick="openEventPopup('stulogins')">STUDENT</button>
 
-                    <button onclick="logout()" class="re logout hidden" id="logoutbtn">LOGOUT</button>
+  <!-- Background decorative circles -->
+  <div class="hero-bg-circle c1"></div>
+  <div class="hero-bg-circle c2"></div>
+  <div class="hero-bg-circle c3"></div>
 
-<button class="login re" id="un" onclick="openEventPopup('h')">ADMIN</button></div>
+  <!-- NAV -->
+  <nav class="hero-nav">
 
+    <div class="nav-links">
+      <button class="nav-btn student-btn" id="stu" onclick="openEventPopup('stulogins')">Student</button>
+      <button class="nav-btn logout-nb hidden" id="logoutbtn" onclick="logout()">Logout</button>
+      <a href="{% url 'viewreg' %}">
+        <button id="hiddenButton" class="nav-btn view-nb hidden">View Registrations</button>
+      </a>
+      <button class="nav-btn admin-btn" id="un" onclick="openEventPopup('h')">Admin</button>
+    </div>
+  </nav>
 
-  <a href="https://www.rathinamcollege.edu.in/"><img src="rgf.png" alt="" class="logo"></a>
+  <!-- HERO CONTENT -->
+  <div class="hero-content">
+    <p class="college-name">Rathinam College of Arts &amp; Science</p>
+    <div class="hero-title">Grand Fest</div>
+    <p class="hero-subtitle">Festival of Students</p>
 
-  <div class="fixed">
+    <div class="hero-divider">
+      <div class="hero-divider-line"></div>
+      <div class="hero-divider-dot"></div>
+      <div class="hero-divider-line"></div>
+    </div>
 
-
-
-      <div class="text">
-
-          <img src="{% static 'webtechstyles/Images/rath.png' %}" class="rath">
-          <h3 class="festival">FESTIVAL OF STUDENTS</h3>
-
-           <img src="{% static 'webtechstyles/Images/date.png' %}" class="date">
-          <!-- <h3 class="spot">ON SPOT REGISTRATION AVAILABLE</h3> -->
-           <img src="{% static 'webtechstyles/Images/arrow.png' %}" alt="" class="arrow">
-      </div>
-    <div class="admin">
-      <a href="{% url 'viewreg' %}" class="view_btn">
-      <button id="hiddenButton" class="re hidden" >VIEW REGISTERED EVENTS</button></a>
-
+    <div class="hero-date">
+      <span class="date-dot"></span>
+      10 – 15 March 2025
+      <span class="date-dot"></span>
     </div>
   </div>
+
+  <!-- SCROLL INDICATOR -->
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+
+  <!-- ADMIN LOGIN MODAL -->
   <div id="h" class="full_page">
     <div class="login-container">
-    <h2>Admin Login</h2>
-    <form onsubmit="checkLogin(event)" method="post" autocomplete="off">
-  <input type="text" placeholder="Username" id="user" required />
-  <input type="password" placeholder="Password" id="pass" required />
-  <button type="submit">Log In</button>
-</form>
-
-  </div>
-  </div>
-
-    <div id="stulogins" class="full_page" style="display:none; position:fixed; top:0; left:0;
-    width:100%; height:100%; background:rgba(0,0,0,0.7);
-    justify-content:center; align-items:center;">
-
-  <div class="login-container" style="background:#fff; padding:20px; border-radius:8px; width:320px;">
-
-    <div style="text-align:center; margin-bottom:15px; display:flex;">
-      <button onclick="showForm('studentLogin')" style="margin-right:10px;">Student Login</button>
-      <button onclick="showForm('studentRegister')">Student Register</button>
+      <h2>Admin Login</h2>
+      <form onsubmit="checkLogin(event)" method="post" autocomplete="off">
+        <input type="text" placeholder="Username" id="user" required />
+        <input type="password" placeholder="Password" id="pass" required />
+        <button type="submit">Log In</button>
+      </form>
     </div>
-
-    <!-- Student Login Form -->
-    <form id="studentLoginForm" onsubmit="checkStudentLogin(event)" method="post" autocomplete="off">
-      <h2>Student Login</h2>
-      <input type="text" name="log_name" placeholder="Username" id="studentUser" required style="width:100%; padding:8px; margin-bottom:10px;" />
-      <input type="password" name="log_pass" placeholder="Password" id="studentPass" required style="width:100%; padding:8px; margin-bottom:10px;" />
-      <button type="submit" style="width:100%; padding:10px;">Log In</button>
-    </form>
-
-    <!-- Student Register Form -->
-    <form id="studentRegisterForm" onsubmit="checkStudentRegister(event)"  style="display:none;" method="post" autocomplete="off" action="/register/">
-        {% csrf_token %}
-      <h2>Student Register</h2>
-      <input type="text" placeholder="Username" id="regUser" required style="width:100%; padding:8px; margin-bottom:10px;" name="reg_name"/>
-
-      <input type="password" placeholder="Password" id="regPass" required style="width:100%; padding:8px; margin-bottom:10px;" name="reg_password" />
-      <input type="password" placeholder="Confirm Password" id="regConfirmPass" required style="width:100%; padding:8px; margin-bottom:10px;" />
-      <button type="submit" style="width:100%; padding:10px;">Register</button>
-    </form>
-
   </div>
-</div>
 
-
-
+  <!-- STUDENT LOGIN / REGISTER MODAL -->
+  <div id="stulogins" class="full_page" style="display:none;">
+    <div class="login-container">
+      <div style="text-align:center; margin-bottom:18px; display:flex; gap:10px;">
+        <button onclick="showForm('studentLogin')" style="flex:1; padding:10px; border-radius:8px; border:1.5px solid #1a1a1a; background:transparent; font-family:'Inter',sans-serif; font-size:11px; font-weight:600; letter-spacing:2px; cursor:pointer;">Login</button>
+        <button onclick="showForm('studentRegister')" style="flex:1; padding:10px; border-radius:8px; border:none; background:#1a1a1a; color:#fff; font-family:'Inter',sans-serif; font-size:11px; font-weight:600; letter-spacing:2px; cursor:pointer;">Register</button>
+      </div>
+      <form id="studentLoginForm" onsubmit="checkStudentLogin(event)" method="post" autocomplete="off">
+        <h2>Student Login</h2>
+        <input type="text" name="log_name" placeholder="Username" id="studentUser" required />
+        <input type="password" name="log_pass" placeholder="Password" id="studentPass" required />
+        <button type="submit">Log In</button>
+      </form>
+      <form id="studentRegisterForm" onsubmit="checkStudentRegister(event)" style="display:none;" method="post" autocomplete="off" action="/register/">
+        {% csrf_token %}
+        <h2>Student Register</h2>
+        <input type="text" placeholder="Username" id="regUser" required name="reg_name"/>
+        <input type="password" placeholder="Password" id="regPass" required name="reg_password" />
+        <input type="password" placeholder="Confirm Password" id="regConfirmPass" required />
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  </div>
 
   <div id="welcomePopup" class="welcome hidden"></div>
+
   <script>
     function openEventPopup(popupId) {
-  document.getElementById(popupId).style.display = 'flex';
-}
-
-function closePopup(popupId) {
-  document.getElementById(popupId).style.display = 'none';
-}
-
+      document.getElementById(popupId).style.display = 'flex';
+    }
+    function closePopup(popupId) {
+      document.getElementById(popupId).style.display = 'none';
+    }
 
     const user = "admin";
     const password = "123";
 
     function checkLogin(event) {
-  event.preventDefault(); // ✅ Stop the form from reloading the page
-
-  const e = document.getElementById("user").value;
-  const p = document.getElementById("pass").value;
-
-  if (e === user && p === password) {
-    localStorage.setItem("isLoggedIn", "true");
-    document.getElementById("hiddenButton").classList.remove("hidden");
-    document.getElementById("logoutbtn").classList.remove("hidden");
-    document.getElementById("un").classList.add("hidden");
-    document.getElementById("stu").style.opacity=0;
-    closePopup("h");
-     showWelcomePopup(e);
-     localStorage.setItem("role", "admin");
-
-  } else {
-    alert("Invalid Username or Password");
-
-
-  }
-        document.getElementById("btn").disabled = false;
-
-}
-if (localStorage.getItem("role")) {
-      document.getElementByClassName("btn").disabled = false;
+      event.preventDefault();
+      const e = document.getElementById("user").value;
+      const p = document.getElementById("pass").value;
+      if (e === user && p === password) {
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("role", "admin");
+        document.getElementById("hiddenButton").classList.remove("hidden");
+        document.getElementById("logoutbtn").classList.remove("hidden");
+        document.getElementById("un").classList.add("hidden");
+        document.getElementById("stu").classList.add("hidden");
+        closePopup("h");
+        showWelcomePopup(e);
+      } else {
+        alert("Invalid Username or Password");
+      }
     }
 
-function showWelcomePopup(name) {
-  const popup = document.getElementById("welcomePopup");
-  popup.innerText = `Welcome, ${name}!`;
-  popup.classList.remove("hidden");
-
-  // Optional: Hide popup after 3 seconds
-  setTimeout(() => {
-    popup.classList.add("hidden");
-  }, 3000);
-}
-function showLogoutPopup() {
-  const popup = document.getElementById("welcomePopup");
-  popup.innerText = "You have successfully logged out.";
-  popup.classList.remove("hidden");
-
-  setTimeout(() => {
-    popup.classList.add("hidden");
-  }, 3000);
-}
-function logout() {
-  localStorage.removeItem("isLoggedIn"); // ❌ Clear login state
-  document.getElementById("stu").style.opacity=1;
-  showLogoutPopup()
-  document.getElementById("hiddenButton").classList.add("hidden");
-  document.getElementById("logoutbtn").classList.add("hidden");
-  document.getElementById("un").classList.remove("hidden");
-}
-window.onload = function () {
-  if (localStorage.getItem("isLoggedIn") === "true") {
-    document.getElementById("hiddenButton").classList.remove("hidden");
-    document.getElementById("logoutbtn").classList.remove("hidden");
-    document.getElementById("un").classList.add("hidden");
-  }
-};
-function openPopup() {
-    document.getElementById('stulogins').style.display = 'flex';
-    showForm('studentLogin');
-  }
-
-  // Toggle forms
-  function showForm(formName) {
-    const forms = ['studentLoginForm', 'studentRegisterForm'];
-    forms.forEach(id => {
-      document.getElementById(id).style.display = (id === formName + 'Form') ? 'block' : 'none';
-    });
-  }
-
-  // Student login handler
-  function checkStudentLogin(e) {
-  e.preventDefault();
-  const user = document.getElementById('studentUser').value;
-  const pass = document.getElementById('studentPass').value;
-
-  const validUser = "stu";
-  const validPass = "123";
-
-  if (user === validUser && pass === validPass) {
-    showWelcomePopup(user)
-    document.getElementById('stulogins').style.display = 'none';
-     localStorage.setItem("isLoggedIn", "true");
-    document.getElementById("logoutbtn").classList.remove("hidden");
-    document.getElementById("un").classList.add("hidden");
-    document.getElementById("stu").style.opacity=0;
-    closePopup("stulogins");
-     localStorage.setItem("role", "student");
-  } else {
-    alert("Invalid username or password");
-  }
-}
-
-  // Student register handler
-  function checkStudentRegister(e) {
-    e.preventDefault();
-    const user = document.getElementById('regUser').value;
-    const pass = document.getElementById('regPass').value;
-    const confirmPass = document.getElementById('regConfirmPass').value;
-    if (pass !== confirmPass) {
-      alert("Passwords don't match!");
-      return;
-
+    function showWelcomePopup(name) {
+      const popup = document.getElementById("welcomePopup");
+      popup.innerText = `Welcome, ${name}!`;
+      popup.classList.remove("hidden");
+      setTimeout(() => { popup.classList.add("hidden"); }, 3000);
     }
-    showWelcomePopup(user)
-    document.getElementById("logoutbtn").classList.remove("hidden");
-    document.getElementById("un").classList.add("hidden");
-    document.getElementById("stu").style.opacity=0;
-    document.getElementById('stulogins').style.display = 'none';
-  }
+    function showLogoutPopup() {
+      const popup = document.getElementById("welcomePopup");
+      popup.innerText = "Successfully logged out.";
+      popup.classList.remove("hidden");
+      setTimeout(() => { popup.classList.add("hidden"); }, 3000);
+    }
+    function logout() {
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("role");
+      document.getElementById("hiddenButton").classList.add("hidden");
+      document.getElementById("logoutbtn").classList.add("hidden");
+      document.getElementById("un").classList.remove("hidden");
+      document.getElementById("stu").classList.remove("hidden");
+      showLogoutPopup();
+    }
+    window.onload = function () {
+      if (localStorage.getItem("isLoggedIn") === "true") {
+        document.getElementById("hiddenButton").classList.remove("hidden");
+        document.getElementById("logoutbtn").classList.remove("hidden");
+        document.getElementById("un").classList.add("hidden");
+        document.getElementById("stu").classList.add("hidden");
+      }
+    };
+    function openPopup() {
+      document.getElementById('stulogins').style.display = 'flex';
+      showForm('studentLogin');
+    }
+    function showForm(formName) {
+      const forms = ['studentLoginForm', 'studentRegisterForm'];
+      forms.forEach(id => {
+        document.getElementById(id).style.display = (id === formName + 'Form') ? 'block' : 'none';
+      });
+    }
+    function checkStudentLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById('studentUser').value;
+      const pass = document.getElementById('studentPass').value;
+      if (user === "stu" && pass === "123") {
+        showWelcomePopup(user);
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("role", "student");
+        document.getElementById("logoutbtn").classList.remove("hidden");
+        document.getElementById("un").classList.add("hidden");
+        document.getElementById("stu").classList.add("hidden");
+        closePopup("stulogins");
+      } else {
+        alert("Invalid username or password");
+      }
+    }
+    function checkStudentRegister(e) {
+      e.preventDefault();
+      const pass = document.getElementById('regPass').value;
+      const confirmPass = document.getElementById('regConfirmPass').value;
+      if (pass !== confirmPass) { alert("Passwords don't match!"); return; }
+      showWelcomePopup(document.getElementById('regUser').value);
+      document.getElementById("logoutbtn").classList.remove("hidden");
+      document.getElementById("un").classList.add("hidden");
+      document.getElementById("stu").classList.add("hidden");
+      closePopup("stulogins");
+    }
   </script>
 </div>
 <div class="section">
