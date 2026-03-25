@@ -90,6 +90,12 @@ body {
     gap: 8px;
 }
 
+.nav-brand img {
+    height: 65px;
+    width: auto;
+    display: block;
+}
+
 .brand-dot {
     width: 8px;
     height: 8px;
@@ -639,8 +645,9 @@ ul { list-style: none; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
-    .hero-nav { padding: 16px 20px; justify-content: center; }
+    .hero-nav { padding: 16px 20px; justify-content: space-between; }
     .nav-brand { font-size: 20px; }
+    .nav-brand img { height: 32px; }
     .nav-links { gap: 8px; }
     .nav-btn { padding: 8px 16px; font-size: 9px; letter-spacing: 2px; }
 
