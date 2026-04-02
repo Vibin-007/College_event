@@ -8,302 +8,775 @@
     <link rel="icon" type="image/png" href="{% static 'webtechstyles/Images/rgf.png' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'webtechstyles/css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'webtechstyles/css/index.css' %}?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-card: #0d0d0d;
+            --bg-elevated: #141414;
+            --text-primary: #f5f5f5;
+            --text-secondary: #a0a0a0;
+            --text-muted: #555555;
+            --accent-gold: #d4af37;
+            --accent-copper: #b87333;
+            --border-subtle: #1a1a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #000000;
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 0% 0%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 100% 100%, rgba(184, 115, 51, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* NAV */
+        .hero-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 50px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+        }
+
+        .nav-brand img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            padding: 12px 28px;
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .nav-btn.primary {
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+            color: #000000;
+        }
+
+        .nav-btn.primary:hover {
+            background: transparent;
+            color: var(--accent-gold);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 20px 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5em;
+            color: var(--accent-gold);
+            margin-bottom: 25px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(4rem, 15vw, 10rem);
+            font-weight: 600;
+            line-height: 1;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+        }
+
+        .hero-title span {
+            display: block;
+        }
+
+        .hero-title .line1 {
+            font-style: italic;
+            color: var(--text-primary);
+        }
+
+        .hero-title .line2 {
+            color: var(--accent-gold);
+            font-style: italic;
+        }
+
+        .hero-tags {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+        }
+
+        .hero-tag {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+        }
+
+        .hero-tag-sep {
+            color: var(--accent-gold);
+            font-size: 0.6rem;
+        }
+
+        .hero-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 35px;
+            border: 1px solid var(--border-subtle);
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.8s forwards;
+        }
+
+        .hero-date .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .hero-date span {
+            font-size: 1rem;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+        }
+
+        .hero-cta {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 1s forwards;
+        }
+
+        .hero-cta a {
+            text-decoration: none;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            padding: 18px 50px;
+            background: transparent;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            text-decoration: none;
+            transition: all 0.4s;
+        }
+
+        .hero-btn:hover {
+            background: var(--accent-gold);
+            color: #000000;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* SECTIONS */
+        .section {
+            min-height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-content {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 500;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .section-title .accent {
+            font-style: italic;
+            color: var(--accent-gold);
+        }
+
+        .section-desc {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+
+        .section-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .section-btn:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        /* FOOTER */
+        .footer {
+            padding: 60px 40px;
+            border-top: 1px solid var(--border-subtle);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .footer-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 500;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .social-link svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .footer-copy {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* MODALS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #0a0a0a;
+            border: 1px solid var(--border-subtle);
+            padding: 50px;
+            max-width: 420px;
+            width: 90%;
+            position: relative;
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .modal-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .modal-tab {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-tab.active {
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+            color: #000000;
+        }
+
+        .modal-form input {
+            width: 100%;
+            padding: 15px;
+            background: #0d0d0d;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .modal-form input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+
+        .modal-form input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .modal-form button {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent-gold);
+            border: none;
+            color: #000000;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .modal-form button:hover {
+            background: #e5c14b;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            display: none;
+        }
+
+        .form-group.active {
+            display: block;
+        }
+
+        /* POPUP */
+        .popup {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            background: var(--accent-gold);
+            color: #000000;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            z-index: 10000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .popup.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .hero-nav {
+                padding: 20px;
+            }
+
+            .nav-links {
+                gap: 8px;
+            }
+
+            .nav-btn {
+                padding: 10px 15px;
+                font-size: 0.75rem;
+            }
+
+            .hero-title {
+                font-size: clamp(3rem, 12vw, 6rem);
+            }
+
+            .hero-tags {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .section {
+                padding: 60px 20px;
+            }
+
+            .modal {
+                padding: 30px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<!-- ══ SECTION 1 — HERO ══ -->
-<div class="section">
-
-  <!-- Ambient orbs -->
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-
-  <!-- NAV -->
-  <nav class="hero-nav">
-    <div class="nav-brand">
-      <img src="{% static 'webtechstyles/Images/rgf.png' %}" alt="RGF">
-    </div>
-    <div class="nav-links">
-      <button class="nav-btn student-btn" id="stu" onclick="openEventPopup('stulogins')">Student</button>
-      <button class="nav-btn logout-nb hidden" id="logoutbtn" onclick="logout()">Logout</button>
-      <a href="{% url 'viewreg' %}">
-        <button id="hiddenButton" class="nav-btn view-nb hidden">View Registrations</button>
-      </a>
-      <button class="nav-btn admin-btn" id="un" onclick="openEventPopup('h')">Admin</button>
-    </div>
-  </nav>
-
-  <!-- HERO CONTENT -->
-  <div class="hero-content">
-
-    <div class="hero-title-wrap">
-      <div class="hero-title-line1">Grand</div>
-      <div class="hero-title-line2">Fest</div>
-    </div>
-
-    <div class="hero-tag-row">
-      <span class="hero-tag">Technical</span>
-      <span class="hero-tag-sep">✦</span>
-      <span class="hero-tag">Cultural</span>
-      <span class="hero-tag-sep">✦</span>
-      <span class="hero-tag">Sports</span>
-    </div>
-
-    <div class="hero-date-pill">
-      <span class="pulse-dot"></span>
-      <span style="margin-right: -6px;">10 – 15 March 2025</span>
-      <span class="pulse-dot"></span>
-    </div>
-
-    <div class="hero-cta-row">
-      <a href="eve">
-        <button class="btn">
-          <span class="btn-text-one">Events</span>
-          <span class="btn-text-two">Explore Now</span>
-        </button>
-      </a>
-    </div>
-  </div>
-
-  <!-- SCROLL INDICATOR -->
-  <div class="hero-scroll">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
-  </div>
-
-  <!-- ADMIN LOGIN MODAL -->
-  <div id="h" class="full_page">
-    <div class="login-container">
-      <h2>Admin Login</h2>
-      <form onsubmit="checkLogin(event)" method="post" autocomplete="off">
-        <input type="text" placeholder="Username" id="user" required />
-        <input type="password" placeholder="Password" id="pass" required />
-        <button type="submit">Log In</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- STUDENT LOGIN / REGISTER MODAL -->
-  <div id="stulogins" class="full_page" style="display:none;">
-    <div class="login-container">
-      <div style="text-align:center; margin-bottom:18px; display:flex; gap:10px;">
-        <button onclick="showForm('studentLogin')" style="flex:1; padding:10px; border-radius:8px; border:1.5px solid #1a1a1a; background:transparent; font-family:'Inter',sans-serif; font-size:11px; font-weight:600; letter-spacing:2px; cursor:pointer;">Login</button>
-        <button onclick="showForm('studentRegister')" style="flex:1; padding:10px; border-radius:8px; border:none; background:#1a1a1a; color:#fff; font-family:'Inter',sans-serif; font-size:11px; font-weight:600; letter-spacing:2px; cursor:pointer;">Register</button>
-      </div>
-      <form id="studentLoginForm" onsubmit="checkStudentLogin(event)" method="post" autocomplete="off">
-        <h2>Student Login</h2>
-        <input type="text" name="log_name" placeholder="Username" id="studentUser" required />
-        <input type="password" name="log_pass" placeholder="Password" id="studentPass" required />
-        <button type="submit">Log In</button>
-      </form>
-      <form id="studentRegisterForm" onsubmit="checkStudentRegister(event)" style="display:none;" method="post" autocomplete="off" action="/register/">
-        {% csrf_token %}
-        <h2>Student Register</h2>
-        <input type="text" placeholder="Username" id="regUser" required name="reg_name"/>
-        <input type="password" placeholder="Password" id="regPass" required name="reg_password" />
-        <input type="password" placeholder="Confirm Password" id="regConfirmPass" required />
-        <button type="submit">Register</button>
-      </form>
-    </div>
-  </div>
-
-  <div id="welcomePopup" class="welcome hidden"></div>
-
-  <script>
-    function openEventPopup(popupId) {
-      document.getElementById(popupId).style.display = 'flex';
-    }
-    function closePopup(popupId) {
-      document.getElementById(popupId).style.display = 'none';
-    }
-
-    const user = "admin";
-    const password = "123";
-
-    function checkLogin(event) {
-      event.preventDefault();
-      const e = document.getElementById("user").value;
-      const p = document.getElementById("pass").value;
-      if (e === user && p === password) {
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("role", "admin");
-        document.getElementById("hiddenButton").classList.remove("hidden");
-        document.getElementById("logoutbtn").classList.remove("hidden");
-        document.getElementById("un").classList.add("hidden");
-        document.getElementById("stu").classList.add("hidden");
-        closePopup("h");
-        showWelcomePopup(e);
-      } else {
-        alert("Invalid Username or Password");
-      }
-    }
-
-    function showWelcomePopup(name) {
-      const popup = document.getElementById("welcomePopup");
-      popup.innerText = `Welcome, ${name}!`;
-      popup.classList.remove("hidden");
-      setTimeout(() => { popup.classList.add("hidden"); }, 3000);
-    }
-    function showLogoutPopup() {
-      const popup = document.getElementById("welcomePopup");
-      popup.innerText = "Successfully logged out.";
-      popup.classList.remove("hidden");
-      setTimeout(() => { popup.classList.add("hidden"); }, 3000);
-    }
-    function logout() {
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("role");
-      document.getElementById("hiddenButton").classList.add("hidden");
-      document.getElementById("logoutbtn").classList.add("hidden");
-      document.getElementById("un").classList.remove("hidden");
-      document.getElementById("stu").classList.remove("hidden");
-      showLogoutPopup();
-    }
-    window.onload = function () {
-      if (localStorage.getItem("isLoggedIn") === "true") {
-        document.getElementById("hiddenButton").classList.remove("hidden");
-        document.getElementById("logoutbtn").classList.remove("hidden");
-        document.getElementById("un").classList.add("hidden");
-        document.getElementById("stu").classList.add("hidden");
-      }
-    };
-    function openPopup() {
-      document.getElementById('stulogins').style.display = 'flex';
-      showForm('studentLogin');
-    }
-    function showForm(formName) {
-      const forms = ['studentLoginForm', 'studentRegisterForm'];
-      forms.forEach(id => {
-        document.getElementById(id).style.display = (id === formName + 'Form') ? 'block' : 'none';
-      });
-    }
-    function checkStudentLogin(e) {
-      e.preventDefault();
-      const user = document.getElementById('studentUser').value;
-      const pass = document.getElementById('studentPass').value;
-      if (user === "stu" && pass === "123") {
-        showWelcomePopup(user);
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("role", "student");
-        document.getElementById("logoutbtn").classList.remove("hidden");
-        document.getElementById("un").classList.add("hidden");
-        document.getElementById("stu").classList.add("hidden");
-        closePopup("stulogins");
-      } else {
-        alert("Invalid username or password");
-      }
-    }
-    function checkStudentRegister(e) {
-      e.preventDefault();
-      const pass = document.getElementById('regPass').value;
-      const confirmPass = document.getElementById('regConfirmPass').value;
-      if (pass !== confirmPass) { alert("Passwords don't match!"); return; }
-      showWelcomePopup(document.getElementById('regUser').value);
-      document.getElementById("logoutbtn").classList.remove("hidden");
-      document.getElementById("un").classList.add("hidden");
-      document.getElementById("stu").classList.add("hidden");
-      closePopup("stulogins");
-    }
-  </script>
-</div>
-
-<!-- ══ SECTION 2 — VIBE ══ -->
-<div class="section">
-    <div class="fixed1">
-        <h1 class="vibe">Experience the<br><span class="og">ORIGINAL</span> Vibe . . . </h1>
-    </div>
-</div>
-
-<!-- ══ SECTION 3 — EVENTS CTA ══ -->
-<div class="section">
-    <div class="fixedlast">
-        <h1 class="last">Mark The Calendar to participate in RGF events.</h1>
-        <center>
-            <a href="eve">
-                <button class="btn">
-                    <span class="btn-text-one">Events</span>
-                    <span class="btn-text-two">Explore Now</span>
-                </button>
+    <!-- NAV -->
+    <nav class="hero-nav">
+        <div class="nav-brand">
+            <img src="{% static 'webtechstyles/Images/rgf.png' %}" alt="RGF">
+        </div>
+        <div class="nav-links">
+            <button class="nav-btn" id="stu" onclick="openModal('studentModal')">Student</button>
+            <button class="nav-btn" id="un" onclick="openModal('adminModal')">Admin</button>
+            <a href="{% url 'viewreg' %}" class="hidden" id="viewRegBtn">
+                <button class="nav-btn">View Registrations</button>
             </a>
-        </center>
+            <button class="nav-btn hidden" id="logoutBtn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+        <p class="hero-label">Rathinam Group of Institutions</p>
+        <h1 class="hero-title">
+            <span class="line1">Grand</span>
+            <span class="line2">Fest</span>
+        </h1>
+        <div class="hero-tags">
+            <span class="hero-tag">Technical</span>
+            <span class="hero-tag-sep">✦</span>
+            <span class="hero-tag">Cultural</span>
+            <span class="hero-tag-sep">✦</span>
+            <span class="hero-tag">Sports</span>
+            <span class="hero-tag-sep">✦</span>
+            <span class="hero-tag">Workshop</span>
+        </div>
+        <div class="hero-date">
+            <span class="dot"></span>
+            <span>10 – 15 March 2025</span>
+            <span class="dot"></span>
+        </div>
+        <div class="hero-cta">
+            <a href="{% url 'eve' %}" class="hero-btn">Explore Events</a>
+        </div>
     </div>
-</div>
 
-<!-- ══ SECTION 4 — FOOTER ══ -->
-<div class="section">
-    <div class="fixed">
-        <h1 class="th">Thank You</h1>
-        <h2 class="fol">Follow Us On</h2>
-        <ul class="example-2">
-            <li class="icon-content">
-                <a href="https://www.instagram.com/rathinam_college/" aria-label="Instagram" data-social="instagram" target="_blank">
-                    <div class="filled"></div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16" xml:space="preserve">
-                        <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334" fill="currentColor"></path>
-                    </svg>
-                </a>
-            </li>
-            <li class="icon-content">
-                <a href="https://www.linkedin.com/school/rathinam-technical-campus-coimbatore/posts/?feedView=all" aria-label="LinkedIn" data-social="linkedin" target="_blank">
-                    <div class="filled"></div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16" xml:space="preserve">
-                        <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z" fill="currentColor"></path>
-                    </svg>
-                </a>
-            </li>
-            <li class="icon-content">
-                <a href="https://www.youtube.com/@RathinamCollege" aria-label="Youtube" data-social="youtube" target="_blank">
-                    <div class="filled"></div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-youtube" viewBox="0 0 16 16" xml:space="preserve">
-                        <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.01 2.01 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.01 2.01 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31 31 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.01 2.01 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A100 100 0 0 1 7.858 2zM6.4 5.209v4.818l4.157-2.408z" fill="currentColor"></path>
-                    </svg>
-                </a>
-            </li>
-        </ul>
-        <p class="copyright">© Copyright 2025 Rathinam Group of Institutions. All Rights Reserved</p>
+    <!-- VIBE SECTION -->
+    <div class="section">
+        <div class="section-content">
+            <h2 class="section-title">
+                Experience the <span class="accent">Original</span> Vibe
+            </h2>
+            <p class="section-desc">
+                Immerse yourself in the ultimate college fest experience. From technical competitions to cultural performances, sports tournaments to startup showcases — RGF brings together the best of everything.
+            </p>
+            <a href="{% url 'eve' %}" class="section-btn">Discover Events</a>
+        </div>
     </div>
-</div>
 
+    <!-- CALENDAR CTA -->
+    <div class="section">
+        <div class="section-content">
+            <h2 class="section-title">
+                Mark Your <span class="accent">Calendar</span>
+            </h2>
+            <p class="section-desc">
+                Don't miss out on the biggest college event of the year. Register now and be part of something extraordinary.
+            </p>
+            <a href="{% url 'Reg' %}" class="section-btn">Register Now</a>
+        </div>
+    </div>
 
-<script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
-<script>
-    // Particle cursor
-    const TAIL_LENGTH = 20;
-    let mouseX = 0, mouseY = 0;
-    let cursorCircles, cursorHistory = Array(TAIL_LENGTH).fill({x: 0, y: 0});
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 class="footer-title">Thank You</h3>
+            <div class="social-links">
+                <a href="https://www.instagram.com/rathinam_college/" target="_blank" class="social-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.069-4.85.069-3.204 0-3.584-.012-4.849-.069-3.225-.149-4.771-1.664-4.919-4.919-.058-1.265-.069-1.644-.069-4.849 0-3.204.012-3.584.069-4.849.149-3.225 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+                <a href="https://www.linkedin.com/school/rathinam-technical-campus-coimbatore/posts/?feedView=all" target="_blank" class="social-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                <a href="https://www.youtube.com/@RathinamCollege" target="_blank" class="social-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </a>
+            </div>
+            <p class="footer-copy">© 2025 Rathinam Group of Institutions. All Rights Reserved.</p>
+        </div>
+    </footer>
 
-    function onMouseMove(event) { mouseX = event.clientX; mouseY = event.clientY; }
-    function initCursor() {
-        const cursor = document.createElement('div');
-        cursor.id = 'cursor-trail';
-        cursor.style.cssText = 'position:fixed;top:0;left:0;pointer-events:none;z-index:99999;mix-blend-mode:difference;';
-        document.body.appendChild(cursor);
-        for (let i = 0; i < TAIL_LENGTH; i++) {
-            let div = document.createElement('div');
-            div.classList.add('cursor-circle');
-            cursor.append(div);
+    <!-- ADMIN MODAL -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal('adminModal')">&times;</button>
+            <h2 class="modal-title">Admin Login</h2>
+            <form class="modal-form" onsubmit="checkLogin(event)">
+                <input type="text" placeholder="Username" id="user" required>
+                <input type="password" placeholder="Password" id="pass" required>
+                <button type="submit">Log In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- STUDENT MODAL -->
+    <div class="modal-overlay" id="studentModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal('studentModal')">&times;</button>
+            <div class="modal-tabs">
+                <button class="modal-tab active" onclick="switchTab('login')">Login</button>
+                <button class="modal-tab" onclick="switchTab('register')">Register</button>
+            </div>
+            <form class="modal-form form-group active" id="loginForm" onsubmit="checkStudentLogin(event)">
+                <input type="text" placeholder="Username" id="studentUser" required>
+                <input type="password" placeholder="Password" id="studentPass" required>
+                <button type="submit">Log In</button>
+            </form>
+            <form class="modal-form form-group" id="registerForm" onsubmit="checkStudentRegister(event)">
+                <input type="text" placeholder="Username" name="reg_name" required>
+                <input type="password" placeholder="Password" name="reg_password" required>
+                <input type="password" placeholder="Confirm Password" id="regConfirmPass" required>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- POPUP -->
+    <div class="popup" id="popup"></div>
+
+    <script>
+        const user = "admin";
+        const password = "123";
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
         }
-        cursorCircles = Array.from(document.querySelectorAll('.cursor-circle'));
-    }
-    function updateCursor() {
-        cursorHistory.shift();
-        cursorHistory.push({ x: mouseX, y: mouseY });
-        for (let i = 0; i < TAIL_LENGTH; i++) {
-            let current = cursorHistory[i];
-            let next = cursorHistory[i + 1] || cursorHistory[TAIL_LENGTH - 1];
-            current.x += (next.x - current.x) * 0.35;
-            current.y += (next.y - current.y) * 0.35;
-            cursorCircles[i].style.transform = `translate(${current.x}px, ${current.y}px) scale(${i/TAIL_LENGTH})`;
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
         }
-        requestAnimationFrame(updateCursor);
-    }
-    document.addEventListener('mousemove', onMouseMove, false);
-    initCursor();
-    updateCursor();
-</script>
+
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.modal-tab');
+            const forms = document.querySelectorAll('.form-group');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            forms.forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'login') {
+                tabs[0].classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+            }
+        }
+
+        function showPopup(message) {
+            const popup = document.getElementById('popup');
+            popup.textContent = message;
+            popup.classList.add('show');
+            setTimeout(() => popup.classList.remove('show'), 3000);
+        }
+
+        function checkLogin(event) {
+            event.preventDefault();
+            const e = document.getElementById("user").value;
+            const p = document.getElementById("pass").value;
+            if (e === user && p === password) {
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("role", "admin");
+                document.getElementById("viewRegBtn").classList.remove("hidden");
+                document.getElementById("logoutBtn").classList.remove("hidden");
+                document.getElementById("un").classList.add("hidden");
+                document.getElementById("stu").classList.add("hidden");
+                closeModal('adminModal');
+                showPopup(`Welcome, ${e}!`);
+            } else {
+                alert("Invalid Username or Password");
+            }
+        }
+
+        function checkStudentLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('studentUser').value;
+            const pass = document.getElementById('studentPass').value;
+            if (user === "stu" && pass === "123") {
+                showPopup(`Welcome, ${user}!`);
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("role", "student");
+                document.getElementById("logoutBtn").classList.remove("hidden");
+                document.getElementById("un").classList.add("hidden");
+                document.getElementById("stu").classList.add("hidden");
+                closeModal("studentModal");
+            } else {
+                alert("Invalid username or password");
+            }
+        }
+
+        function checkStudentRegister(e) {
+            e.preventDefault();
+            const pass = document.getElementById('regConfirmPass').previousElementSibling;
+            const confirmPass = document.getElementById('regConfirmPass');
+            if (pass.value !== confirmPass.value) {
+                alert("Passwords don't match!");
+                return;
+            }
+            showPopup("Registration successful!");
+            document.getElementById("logoutBtn").classList.remove("hidden");
+            document.getElementById("un").classList.add("hidden");
+            document.getElementById("stu").classList.add("hidden");
+            closeModal("studentModal");
+        }
+
+        function logout() {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("role");
+            document.getElementById("viewRegBtn").classList.add("hidden");
+            document.getElementById("logoutBtn").classList.add("hidden");
+            document.getElementById("un").classList.remove("hidden");
+            document.getElementById("stu").classList.remove("hidden");
+            showPopup("Successfully logged out.");
+        }
+
+        window.onload = function () {
+            if (localStorage.getItem("isLoggedIn") === "true") {
+                document.getElementById("viewRegBtn").classList.remove("hidden");
+                document.getElementById("logoutBtn").classList.remove("hidden");
+                document.getElementById("un").classList.add("hidden");
+                document.getElementById("stu").classList.add("hidden");
+            }
+        };
+
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
