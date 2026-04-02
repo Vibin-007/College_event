@@ -2,148 +2,287 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Register Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register // RGF 2025</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
+    :root {
+      --bg-primary: #000000;
+      --bg-secondary: #0a0a0a;
+      --bg-card: #0d0d0d;
+      --text-primary: #f5f5f5;
+      --text-secondary: #a0a0a0;
+      --text-muted: #555555;
+      --accent-gold: #d4af37;
+      --accent-copper: #b87333;
+      --border-subtle: #1a1a1a;
+    }
 
-    html, body {
-      height: 100%;
+    * {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      font-size: 16px;
-      background-color: black;
-      color: #f0f0f0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 40px 20px;
+      font-family: 'DM Sans', sans-serif;
+      background: #000000;
+      color: var(--text-primary);
+      min-height: 100vh;
+      position: relative;
     }
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      max-width: 600px;
+      height: 100%;
+      background: 
+        radial-gradient(ellipse at 0% 0%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 100%, rgba(184, 115, 51, 0.06) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .section {
-      border: 2px solid #444;
-      padding: 20px;
-      border-radius: 12px;
-      background-color: #000;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 120px 20px 60px;
+      position: relative;
+      z-index: 1;
     }
 
-    label {
-      display: block;
-      margin-top: 15px;
+    .page-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .page-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4em;
+      color: var(--accent-gold);
+      margin-bottom: 15px;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 600;
+    }
+
+    .form-section {
+      background: #0a0a0a;
+      border: 1px solid var(--border-subtle);
+      padding: 35px;
+      margin-bottom: 25px;
+    }
+
+    .form-section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
       font-weight: 500;
-      color: #ddd;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-subtle);
     }
 
-    select, input, button {
-      margin-top: 8px;
-      padding: 10px;
-      font-size: 16px;
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+
+    .form-input,
+    .form-select {
       width: 100%;
-      border-radius: 6px;
-      border: 1px solid #555;
-      background-color: black;
-      color: #fff;
+      padding: 15px;
+      background: #0d0d0d;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-select {
       cursor: pointer;
-      transition: background 0.3s;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23666' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 15px center;
     }
 
-    input[type="text"], input[type="email"] {
-      cursor: text;
+    .form-select option {
+      background: #0d0d0d;
+      color: var(--text-primary);
     }
 
-    button {
-      background-color: #000;
-      border: 1px solid #555;
-      color: white;
-      margin-top: 20px;
-      font-weight: bold;
-      font-size: 15px;
+    .total-amount {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: #0d0d0d;
+      border: 1px solid var(--border-subtle);
+      margin-top: 10px;
     }
 
-    button:hover {
-      background-color: #fff;
-      color: #000;
+    .total-label {
+      font-size: 1rem;
+      color: var(--text-secondary);
     }
 
-    h3 {
-      margin-top: 0;
-      font-size: 20px;
-      color: #f8f8f8;
+    .total-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--accent-gold);
     }
 
-    h4 {
-      margin: 10px 0 5px;
-      color: #ddd;
-      font-size: 18px;
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: transparent;
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 15px;
+    }
+
+    .submit-btn:hover {
+      background: var(--accent-gold);
+      color: #000000;
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 30px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .back-link:hover {
+      color: var(--accent-gold);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 100px 15px 40px;
+      }
+
+      .form-section {
+        padding: 25px;
+      }
     }
   </style>
 </head>
 <body>
 
-<form method="post" autocomplete="off">
-  {% csrf_token %}
-
-  <!-- Section 1: Personal Info -->
-  <div class="section">
-    <h3>Personal Information</h3>
-    <label>Name</label>
-    <input type="text" name="name" required />
-
-    <label>Email</label>
-    <input type="email" name="email" required />
-
-    <label>Phone Number</label>
-    <input type="text" name="phone" required />
+<div class="container">
+  <div class="page-header">
+    <p class="page-label">Rathinam Grand Fest 2025</p>
+    <h1 class="page-title">Event Registration</h1>
   </div>
 
-  <!-- Section 2: Event Selector -->
-  <div class="section">
-    <h3>Select Event</h3>
+  <form method="post" autocomplete="off">
+    {% csrf_token %}
 
-    <label>Category</label>
-    <select id="categorySelect" name="categorySelect" required>
-      <option value="">-- Select Category --</option>
-      <option value="Technical">Technical</option>
-      <option value="Cultural">Cultural</option>
-      <option value="Workshop">Workshop</option>
-      <option value="Sports">Sports</option>
-      <option value="Pro-Wshow">Pro-Wshow</option>
-      <option value="Start-Up">Start-Up</option>
-    </select>
+    <div class="form-section">
+      <h2 class="form-section-title">Personal Information</h2>
+      
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" name="name" class="form-input" placeholder="Enter your full name" required>
+      </div>
 
-    <label>Event</label>
-    <select id="eventSelect" name="event" required>
-      <option value="">-- Select Event --</option>
-    </select>
-  </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" name="email" class="form-input" placeholder="Enter your email" required>
+      </div>
 
-  <!-- Section 3: Payment -->
-  <div class="section">
-    <h3>Payment Details</h3>
+      <div class="form-group">
+        <label class="form-label">Phone Number</label>
+        <input type="text" name="phone" class="form-input" placeholder="Enter your phone number" required>
+      </div>
+    </div>
 
-    <label>Payment Method</label>
-    <select name="paymentMethod" required>
-      <option value="card">Card</option>
-      <option value="upi">UPI</option>
-    </select>
+    <div class="form-section">
+      <h2 class="form-section-title">Select Event</h2>
+      
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select id="categorySelect" name="categorySelect" class="form-select" required>
+          <option value="">-- Select Category --</option>
+          <option value="Technical">Technical</option>
+          <option value="Cultural">Cultural</option>
+          <option value="Workshop">Workshop</option>
+          <option value="Sports">Sports</option>
+          <option value="Pro-Wshow">Pro-Show</option>
+          <option value="Start-Up">Start-Up</option>
+        </select>
+      </div>
 
-    <p>Total Amount: ₹<span id="finalTotalAmount">0</span></p>
-    <input type="hidden" name="totalAmount" id="totalAmountInput" value="0" />
+      <div class="form-group">
+        <label class="form-label">Event</label>
+        <select id="eventSelect" name="event" class="form-select" required>
+          <option value="">-- Select Event --</option>
+        </select>
+      </div>
+    </div>
 
-    <button type="submit">Make Payment</button>
-  </div>
-</form>
+    <div class="form-section">
+      <h2 class="form-section-title">Payment Details</h2>
+      
+      <div class="form-group">
+        <label class="form-label">Payment Method</label>
+        <select name="paymentMethod" class="form-select" required>
+          <option value="card">Card</option>
+          <option value="upi">UPI</option>
+        </select>
+      </div>
+
+      <div class="total-amount">
+        <span class="total-label">Total Amount</span>
+        <span class="total-value">₹<span id="finalTotalAmount">0</span></span>
+      </div>
+      <input type="hidden" name="totalAmount" id="totalAmountInput" value="0">
+
+      <button type="submit" class="submit-btn">Proceed to Payment</button>
+    </div>
+  </form>
+
+  <a href="{% url 'eve' %}" class="back-link">← Back to Events</a>
+</div>
 
 <script>
   const categorySelect = document.getElementById('categorySelect');
@@ -250,7 +389,6 @@
         eventSelect.appendChild(option);
       });
     }
-    // Reset total when changing category
     finalTotalAmountDisplay.textContent = '0';
     totalAmountInput.value = '0';
   });

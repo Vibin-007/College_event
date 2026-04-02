@@ -1,130 +1,236 @@
-<!-- webtechapp/viewreg.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Registrations</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrations // RGF 2025</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-primary: #000000;
+      --bg-secondary: #0a0a0a;
+      --bg-card: #0d0d0d;
+      --text-primary: #f5f5f5;
+      --text-secondary: #a0a0a0;
+      --text-muted: #555555;
+      --accent-gold: #d4af37;
+      --accent-copper: #b87333;
+      --border-subtle: #1a1a1a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f5f5f5;
+      font-family: 'DM Sans', sans-serif;
+      background: #000000;
+      color: var(--text-primary);
+      min-height: 100vh;
+      position: relative;
     }
-    .container {
-      max-width: 12000px;
-      margin: 0 auto;
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    table {
-      border-collapse: collapse;
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      margin-top: 20px;
+      height: 100%;
+      background: 
+        radial-gradient(ellipse at 0% 0%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 100%, rgba(184, 115, 51, 0.06) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
     }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 20px 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .page-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4em;
+      color: var(--accent-gold);
+      margin-bottom: 15px;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 600;
+    }
+
+    .back-link {
+      display: inline-block;
+      padding: 12px 25px;
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      margin-bottom: 30px;
+    }
+
+    .back-link:hover {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+
+    .table-wrapper {
+      background: #0a0a0a;
+      border: 1px solid var(--border-subtle);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
     th, td {
-      border: 2px solid #000000;
-      padding: 12px;
+      padding: 18px 20px;
       text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
     }
+
     th {
-        font-weight: bold;
-        font-size: 18px;
-        background-color: #f2f2f2;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      background: #0d0d0d;
     }
-    h2{
-        text-align: center;
-        font-weight: bold;
-        font-size: 30px;
-        color: #333;
-        margin-bottom: 20px;
+
+    td {
+      font-size: 0.95rem;
     }
+
+    tr:hover {
+      background: #0d0d0d;
+    }
+
     .action-buttons {
       display: flex;
-      gap: 8px;
-      justify-content: center;
+      gap: 10px;
     }
+
     .edit-btn, .delete-btn {
-      padding: 8px 15px;
-      border: none;
-      border-radius: 4px;
+      padding: 8px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       cursor: pointer;
-      font-size: 14px;
+      transition: all 0.3s;
       text-decoration: none;
-      display: inline-block;
-      transition: background-color 0.3s;
     }
+
     .edit-btn {
-      background-color: #4CAF50;
-      color: white;
+      background: transparent;
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
     }
+
     .edit-btn:hover {
-      background-color: #45a049;
+      background: var(--accent-gold);
+      color: #000000;
     }
+
     .delete-btn {
-      background-color: #f44336;
-      color: white;
-      border: none;
-      cursor: pointer;
+      background: transparent;
+      border: 1px solid #ff4444;
+      color: #ff4444;
     }
+
     .delete-btn:hover {
-      background-color: #da190b;
+      background: #ff4444;
+      color: #000000;
     }
+
     .messages {
-      margin: 20px 0;
+      margin-bottom: 30px;
     }
+
     .messages div {
-      padding: 15px;
+      padding: 15px 20px;
       margin-bottom: 10px;
-      border-radius: 4px;
+      font-size: 0.9rem;
     }
+
     .messages .success {
-      background-color: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
     }
+
     .messages .error {
-      background-color: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
+      background: rgba(255, 68, 68, 0.1);
+      border: 1px solid #ff4444;
+      color: #ff4444;
     }
+
     .no-data {
       text-align: center;
       font-style: italic;
-      color: #666;
-      padding: 20px;
+      color: var(--text-muted);
+      padding: 40px;
     }
-    .back-btn {
-      background-color: #007bff;
-      color: white;
-      padding: 10px 20px;
-      text-decoration: none;
-      border-radius: 4px;
-      display: inline-block;
-      margin-bottom: 20px;
-    }
-    .back-btn:hover {
-      background-color: #0056b3;
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 100px 15px 40px;
+      }
+
+      th, td {
+        padding: 12px 15px;
+        font-size: 0.85rem;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
 
-    <h2>Event Registrations</h2>
+<div class="container">
+  <div class="page-header">
+    <p class="page-label">Admin Panel</p>
+    <h1 class="page-title">Event Registrations</h1>
+  </div>
 
-    <!-- Display Django messages -->
-    {% if messages %}
-    <div class="messages">
-      {% for message in messages %}
-      <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
-        {{ message }}
-      </div>
-      {% endfor %}
+  <a href="{% url 'index' %}" class="back-link">← Back to Home</a>
+
+  {% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+    <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
+      {{ message }}
     </div>
-    {% endif %}
+    {% endfor %}
+  </div>
+  {% endif %}
 
+  <div class="table-wrapper">
     <table>
       <thead>
         <tr>
@@ -132,10 +238,10 @@
           <th>Name</th>
           <th>Email</th>
           <th>Phone</th>
-          <th>Payment Method</th>
-          <th>Event Category</th>
-          <th>Event Name</th>
-          <th>Amount (₹)</th>
+          <th>Payment</th>
+          <th>Category</th>
+          <th>Event</th>
+          <th>Amount</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -168,5 +274,7 @@
       </tbody>
     </table>
   </div>
+</div>
+
 </body>
 </html>
