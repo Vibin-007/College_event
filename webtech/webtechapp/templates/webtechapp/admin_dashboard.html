@@ -286,6 +286,75 @@
       display: block;
     }
 
+    .settings-card {
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+    }
+
+    .setting-info h3 {
+      color: var(--gold);
+      margin-bottom: 5px;
+    }
+
+    .setting-info p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #333;
+      transition: 0.3s;
+      border-radius: 26px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+
+    .toggle input:checked + .slider {
+      background-color: var(--gold);
+    }
+
+    .toggle input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
     .empty-state {
       text-align: center;
       padding: 60px 20px;
@@ -521,6 +590,10 @@
         Admins
         <span class="badge" id="adminCount">0</span>
       </a>
+      <a class="nav-item" data-tab="settings">
+        <i class="fas fa-cog"></i>
+        Settings
+      </a>
     </nav>
     <div class="sidebar-footer">
       <a href="{% url 'index' %}" class="back-btn">
@@ -590,7 +663,6 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th>Icon</th>
               <th>Description</th>
               <th>Events</th>
               <th>Actions</th>
@@ -682,6 +754,25 @@
         </table>
       </div>
     </div>
+
+    <!-- Settings Tab -->
+    <div class="tab-content" id="settings">
+      <div class="section-title">
+        <span>Settings</span>
+      </div>
+      <div class="settings-card">
+        <div class="setting-item">
+          <div class="setting-info">
+            <h3>Require Login for Event Registration</h3>
+            <p>When enabled, users must be logged in to register for events.</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="requireLoginToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
   </main>
 
   <!-- Category Modal -->
@@ -694,17 +785,6 @@
         <div class="form-group">
           <label class="form-label">Category Name</label>
           <input type="text" class="form-input" id="categoryName" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Icon (SVG path name)</label>
-          <select class="form-select" id="categoryIcon">
-            <option value="cpu">CPU / Technical</option>
-            <option value="palette">Palette / Cultural</option>
-            <option value="wrench">Wrench / Workshop</option>
-            <option value="trophy">Trophy / Sports</option>
-            <option value="microphone">Microphone / Pro-Show</option>
-            <option value="rocket">Rocket / Start-Up</option>
-          </select>
         </div>
         <div class="form-group">
           <label class="form-label">Description</label>
@@ -827,7 +907,8 @@
           'events': 'Events',
           'registrations': 'Registrations',
           'students': 'Students',
-          'admins': 'Admins'
+          'admins': 'Admins',
+          'settings': 'Settings'
         };
         document.getElementById('pageTitle').textContent = titles[tab];
       });
@@ -851,7 +932,6 @@
       tbody.innerHTML = categoriesData.map(cat => `
         <tr>
           <td>${cat.name}</td>
-          <td><i class="fas fa-${cat.icon}"></i></td>
           <td>${cat.description || '-'}</td>
           <td>${cat.events.length}</td>
           <td>
@@ -999,7 +1079,6 @@
       if (id) {
         const cat = categoriesData.find(c => c.id === id);
         document.getElementById('categoryName').value = cat.name;
-        document.getElementById('categoryIcon').value = cat.icon;
         document.getElementById('categoryDesc').value = cat.description || '';
       } else {
         document.getElementById('categoryForm').reset();
@@ -1052,7 +1131,6 @@
       const id = document.getElementById('categoryId').value;
       const data = {
         name: document.getElementById('categoryName').value,
-        icon: document.getElementById('categoryIcon').value,
         description: document.getElementById('categoryDesc').value
       };
 
@@ -1168,6 +1246,21 @@
       }
     }
 
+    // Settings toggle
+    document.getElementById('requireLoginToggle').addEventListener('change', async (e) => {
+      await fetch('/api/settings/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({require_login: e.target.checked})
+      });
+    });
+
+    async function loadSettings() {
+      const res = await fetch('/api/settings/');
+      const data = await res.json();
+      document.getElementById('requireLoginToggle').checked = data.require_login;
+    }
+
     // Initialize
     async function init() {
       await loadCategories();
@@ -1175,6 +1268,7 @@
       await loadRegistrations();
       await loadStudents();
       await loadAdmins();
+      await loadSettings();
     }
 
     init();

@@ -61,3 +61,22 @@ class EventRegistration(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.event_name}"
+
+
+class Settings(models.Model):
+    key = models.CharField(max_length=100, unique=True)
+    value = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.key}: {self.value}"
+
+    @classmethod
+    def get(cls, key, default=False):
+        try:
+            return cls.objects.get(key=key).value
+        except cls.DoesNotExist:
+            return default
+
+    @classmethod
+    def set(cls, key, value):
+        cls.objects.update_or_create(key=key, defaults={"value": value})
