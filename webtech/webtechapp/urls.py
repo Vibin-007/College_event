@@ -25,6 +25,8 @@ urlpatterns = [
     path("api/admins/", views.api_admins, name="api_admins"),
     path("api/students/", views.api_students, name="api_students"),
     path("api/registrations/", views.api_registrations, name="api_registrations"),
+    path("api/login/", views.api_login, name="api_login"),
+    path("api/settings/", views.api_settings, name="api_settings"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

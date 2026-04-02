@@ -214,25 +214,31 @@
     <h1 class="page-title">Event Registration</h1>
   </div>
 
-  <form method="post" autocomplete="off">
+  <form method="post" autocomplete="off" id="registrationForm">
     {% csrf_token %}
+
+    <div class="login-warning" id="loginWarning" style="display: none; background: #1a1a1a; border: 1px solid #b87333; padding: 20px; margin: 20px 0; text-align: center;">
+        <h3 style="color: #b87333; margin-bottom: 15px;">Login Required</h3>
+        <p style="color: #ccc; margin-bottom: 20px;">You must be logged in to register for events.</p>
+        <button type="button" onclick="openModal('studentModal')" class="submit-btn" style="display: inline-block; width: auto; padding: 12px 30px;">Login / Register</button>
+    </div>
 
     <div class="form-section">
       <h2 class="form-section-title">Personal Information</h2>
       
       <div class="form-group">
         <label class="form-label">Full Name</label>
-        <input type="text" name="name" class="form-input" placeholder="Enter your full name" required>
+        <input type="text" name="name" id="inputName" class="form-input" placeholder="Enter your full name" required>
       </div>
 
       <div class="form-group">
         <label class="form-label">Email Address</label>
-        <input type="email" name="email" class="form-input" placeholder="Enter your email" required>
+        <input type="email" name="email" id="inputEmail" class="form-input" placeholder="Enter your email" required>
       </div>
 
       <div class="form-group">
         <label class="form-label">Phone Number</label>
-        <input type="text" name="phone" class="form-input" placeholder="Enter your phone number" required>
+        <input type="text" name="phone" id="inputPhone" class="form-input" placeholder="Enter your phone number" required>
       </div>
     </div>
 
@@ -243,12 +249,6 @@
         <label class="form-label">Category</label>
         <select id="categorySelect" name="categorySelect" class="form-select" required>
           <option value="">-- Select Category --</option>
-          <option value="Technical">Technical</option>
-          <option value="Cultural">Cultural</option>
-          <option value="Workshop">Workshop</option>
-          <option value="Sports">Sports</option>
-          <option value="Pro-Wshow">Pro-Show</option>
-          <option value="Start-Up">Start-Up</option>
         </select>
       </div>
 
@@ -298,11 +298,18 @@
       const data = await res.json();
       
       eventData = {};
+      
+      // Populate categories
+      categorySelect.innerHTML = '<option value="">-- Select Category --</option>';
       data.categories.forEach(cat => {
         eventData[cat.name] = cat.events.map(e => ({
           name: e.name,
           price: parseFloat(e.price)
         }));
+        const option = document.createElement('option');
+        option.value = cat.name;
+        option.textContent = cat.name;
+        categorySelect.appendChild(option);
       });
     } catch (err) {
       console.error('Error loading events:', err);
@@ -334,7 +341,232 @@
 
   // Load events on page load
   loadEvents();
+
+  // Check require_login setting and handle login status
+  async function checkLoginRequirement() {
+    try {
+      const res = await fetch('/api/settings/');
+      const data = await res.json();
+      const requireLogin = data.require_login;
+      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+      const role = localStorage.getItem("role");
+      const email = localStorage.getItem("email");
+      
+      if (requireLogin) {
+        if (isLoggedIn && role === "student" && email) {
+          document.getElementById('inputName').value = localStorage.getItem("username") || localStorage.getItem("studentName") || "";
+          document.getElementById('inputEmail').value = email;
+          document.getElementById('inputName').readOnly = true;
+          document.getElementById('inputEmail').readOnly = true;
+          document.getElementById('loginWarning').style.display = 'none';
+        } else {
+          document.getElementById('loginWarning').style.display = 'block';
+          document.getElementById('registrationForm').querySelector('button[type="submit"]').disabled = true;
+        }
+      }
+    } catch (err) {
+      console.error('Error loading settings:', err);
+    }
+  }
+
+  // Handle form submission
+  document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+    const requireLogin = document.getElementById('loginWarning').style.display !== 'none';
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    
+    if (requireLogin && !isLoggedIn) {
+      e.preventDefault();
+      alert("Please login to register for events");
+      openModal('studentModal');
+    }
+  });
+
+  // Handle successful login - reload page
+  function onLoginSuccess() {
+    window.location.reload();
+  }
+
+  checkLoginRequirement();
+
+  function openModal(id) {
+      document.getElementById(id).classList.add('active');
+  }
+
+  function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+  }
+
+  function switchTab(tab) {
+      const tabs = document.querySelectorAll('.modal-tab');
+      const forms = document.querySelectorAll('.modal-form');
+      tabs.forEach(t => t.classList.remove('active'));
+      forms.forEach(f => f.classList.remove('active'));
+      if (tab === 'login') {
+          tabs[0].classList.add('active');
+          document.getElementById('loginForm').classList.add('active');
+      } else {
+          tabs[1].classList.add('active');
+          document.getElementById('registerForm').classList.add('active');
+      }
+  }
+
+  function checkStudentLogin(e) {
+      e.preventDefault();
+      const username = document.getElementById('studentUser').value;
+      const password = document.getElementById('studentPass').value;
+      
+      fetch('/api/login/', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({type: 'student', username: username, password: password})
+      })
+      .then(res => res.json())
+      .then(data => {
+          if (data.success) {
+              localStorage.setItem("isLoggedIn", "true");
+              localStorage.setItem("role", "student");
+              localStorage.setItem("username", data.name);
+              localStorage.setItem("email", data.email || "");
+              closeModal("studentModal");
+              window.location.reload();
+          } else {
+              alert("Invalid username or password");
+          }
+      })
+      .catch(err => {
+          alert("Login failed. Please try again.");
+      });
+  }
+
+  async function checkStudentRegister(e) {
+      e.preventDefault();
+      const form = e.target;
+      const name = form.querySelector('input[name="reg_name"]').value;
+      const email = form.querySelector('input[name="reg_email"]').value;
+      const password = form.querySelector('input[name="reg_password"]').value;
+      const confirmPass = document.getElementById('regConfirmPass');
+      if (password !== confirmPass.value) {
+          alert("Passwords don't match!");
+          return;
+      }
+      const res = await fetch('/api/students/', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({name: name, email: email, password: password})
+      });
+      const data = await res.json().catch(() => ({error: "Invalid response"}));
+      if (res.ok && !data.error) {
+          localStorage.setItem("isLoggedIn", "true");
+          localStorage.setItem("role", "student");
+          localStorage.setItem("studentName", name);
+          localStorage.setItem("email", email);
+          closeModal("studentModal");
+          window.location.reload();
+      } else {
+          alert(data.error || "Registration failed!");
+      }
+  }
 </script>
+
+<!-- Login Modal -->
+<div class="modal-overlay" id="studentModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal('studentModal')">&times;</button>
+        <div class="modal-tabs">
+            <button class="modal-tab active" onclick="switchTab('login')">Login</button>
+            <button class="modal-tab" onclick="switchTab('register')">Register</button>
+        </div>
+        <form class="modal-form form-group active" id="loginForm" onsubmit="checkStudentLogin(event)">
+            <input type="text" placeholder="Username" id="studentUser" required>
+            <input type="password" placeholder="Password" id="studentPass" required>
+            <button type="submit">Log In</button>
+        </form>
+        <form class="modal-form form-group" id="registerForm" onsubmit="checkStudentRegister(event)">
+            <input type="text" placeholder="Username" name="reg_name" required>
+            <input type="email" placeholder="Email" name="reg_email" required>
+            <input type="password" placeholder="Password" name="reg_password" required>
+            <input type="password" placeholder="Confirm Password" id="regConfirmPass" required>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</div>
+<style>
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+.modal-overlay.active {
+    display: flex;
+}
+.modal {
+    background: #111;
+    border: 1px solid #d4af37;
+    padding: 30px;
+    width: 400px;
+    max-width: 90%;
+    position: relative;
+}
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #d4af37;
+    font-size: 28px;
+    cursor: pointer;
+}
+.modal-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #333;
+}
+.modal-tab {
+    flex: 1;
+    padding: 12px;
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 16px;
+}
+.modal-tab.active {
+    color: #d4af37;
+    border-bottom: 2px solid #d4af37;
+}
+.modal-form {
+    display: none;
+}
+.modal-form.active {
+    display: block;
+}
+.modal-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    background: #222;
+    border: 1px solid #333;
+    color: #fff;
+    box-sizing: border-box;
+}
+.modal-form button {
+    width: 100%;
+    padding: 12px;
+    background: #d4af37;
+    border: none;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
 
 </body>
 </html>
