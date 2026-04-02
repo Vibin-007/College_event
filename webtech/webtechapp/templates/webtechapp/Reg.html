@@ -290,92 +290,24 @@
   const finalTotalAmountDisplay = document.getElementById('finalTotalAmount');
   const totalAmountInput = document.getElementById('totalAmountInput');
 
-  const eventData = {
-    "Technical": [
-      { name: "Tech Quiz", price: 250 },
-      { name: "Code Sprint", price: 200 },
-      { name: "UX Design", price: 150 },
-      { name: "Python Hackathon", price: 250 },
-      { name: "AI Challenge", price: 250 },
-      { name: "Cyber Security", price: 200 },
-      { name: "Debugging", price: 150 },
-      { name: "MR Tech Fest", price: 250 },
-      { name: "Hardware Hack", price: 250 },
-      { name: "App Dev", price: 200 },
-      { name: "Web Dev", price: 200 },
-      { name: "Data Science", price: 250 }
-    ],
-    "Cultural": [
-      { name: "Dance Show", price: 150 },
-      { name: "Music Night", price: 200 },
-      { name: "Art Gallery", price: 150 },
-      { name: "Theater Play", price: 200 },
-      { name: "Fashion Show", price: 250 },
-      { name: "Poetry Slam", price: 150 },
-      { name: "Mime Act", price: 150 },
-      { name: "Rangoli", price: 150 },
-      { name: "DJ Night", price: 250 },
-      { name: "Photography", price: 150 },
-      { name: "Singing", price: 150 },
-      { name: "Dramatics", price: 200 }
-    ],
-    "Workshop": [
-      { name: "Science Workshop", price: 200 },
-      { name: "Math Challenge", price: 150 },
-      { name: "Chemistry Demo", price: 200 },
-      { name: "Bio Lab Tour", price: 200 },
-      { name: "Physics Quiz", price: 200 },
-      { name: "AI Seminar", price: 250 },
-      { name: "Robotics Meet", price: 250 },
-      { name: "Science Fair", price: 250 },
-      { name: "Geology Field Trip", price: 200 },
-      { name: "Astro Night", price: 200 },
-      { name: "Nano Tech Talk", price: 250 },
-      { name: "Lab Open Day", price: 150 }
-    ],
-    "Sports": [
-      { name: "Cricket Match", price: 250 },
-      { name: "Football League", price: 250 },
-      { name: "Basketball", price: 200 },
-      { name: "Table Tennis", price: 150 },
-      { name: "Badminton", price: 150 },
-      { name: "Athletics", price: 200 },
-      { name: "Relay Race", price: 200 },
-      { name: "Tug of War", price: 150 },
-      { name: "Volleyball", price: 200 },
-      { name: "Swimming", price: 200 },
-      { name: "Gymnastics", price: 250 },
-      { name: "Boxing", price: 250 }
-    ],
-    "Pro-Wshow": [
-      { name: "Fashion Show", price: 250 },
-      { name: "Dance Performance", price: 250 },
-      { name: "Music Band", price: 250 },
-      { name: "Stand-up Comedy", price: 200 },
-      { name: "Magic Show", price: 200 },
-      { name: "Light & Sound Show", price: 250 },
-      { name: "Fire Dance", price: 250 },
-      { name: "Beat Boxing", price: 200 },
-      { name: "Drama Play", price: 200 },
-      { name: "Band Night", price: 250 },
-      { name: "Solo Performance", price: 150 },
-      { name: "DJ Set", price: 250 }
-    ],
-    "Start-Up": [
-      { name: "Startup Pitch", price: 200 },
-      { name: "Innovation Talks", price: 200 },
-      { name: "Product Launch", price: 250 },
-      { name: "Business Plan", price: 200 },
-      { name: "Investor Connect", price: 250 },
-      { name: "Pitch Arena", price: 250 },
-      { name: "Ideathon", price: 200 },
-      { name: "Networking Event", price: 200 },
-      { name: "Startup Expo", price: 250 },
-      { name: "Incubation Info", price: 150 },
-      { name: "Founders Talks", price: 200 },
-      { name: "Mentor Session", price: 150 }
-    ]
-  };
+  let eventData = {};
+
+  async function loadEvents() {
+    try {
+      const res = await fetch('/api/categories/');
+      const data = await res.json();
+      
+      eventData = {};
+      data.categories.forEach(cat => {
+        eventData[cat.name] = cat.events.map(e => ({
+          name: e.name,
+          price: parseFloat(e.price)
+        }));
+      });
+    } catch (err) {
+      console.error('Error loading events:', err);
+    }
+  }
 
   categorySelect.addEventListener('change', () => {
     const category = categorySelect.value;
@@ -399,6 +331,9 @@
     finalTotalAmountDisplay.textContent = price;
     totalAmountInput.value = price;
   });
+
+  // Load events on page load
+  loadEvents();
 </script>
 
 </body>
