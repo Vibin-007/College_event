@@ -550,6 +550,9 @@
         <div class="nav-links">
             <button class="nav-btn" id="stu" onclick="openModal('studentModal')">Student</button>
             <button class="nav-btn" id="un" onclick="openModal('adminModal')">Admin</button>
+            <a href="{% url 'admin_dashboard' %}" class="hidden" id="adminDashBtn">
+                <button class="nav-btn">Dashboard</button>
+            </a>
             <a href="{% url 'viewreg' %}" class="hidden" id="viewRegBtn">
                 <button class="nav-btn">View Registrations</button>
             </a>
@@ -708,6 +711,7 @@
             if (e === user && p === password) {
                 localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("role", "admin");
+                document.getElementById("adminDashBtn").classList.remove("hidden");
                 document.getElementById("viewRegBtn").classList.remove("hidden");
                 document.getElementById("logoutBtn").classList.remove("hidden");
                 document.getElementById("un").classList.add("hidden");
@@ -754,6 +758,7 @@
         function logout() {
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("role");
+            document.getElementById("adminDashBtn").classList.add("hidden");
             document.getElementById("viewRegBtn").classList.add("hidden");
             document.getElementById("logoutBtn").classList.add("hidden");
             document.getElementById("un").classList.remove("hidden");
@@ -763,10 +768,14 @@
 
         window.onload = function () {
             if (localStorage.getItem("isLoggedIn") === "true") {
-                document.getElementById("viewRegBtn").classList.remove("hidden");
+                const role = localStorage.getItem("role");
                 document.getElementById("logoutBtn").classList.remove("hidden");
                 document.getElementById("un").classList.add("hidden");
                 document.getElementById("stu").classList.add("hidden");
+                if (role === "admin") {
+                    document.getElementById("adminDashBtn").classList.remove("hidden");
+                    document.getElementById("viewRegBtn").classList.remove("hidden");
+                }
             }
         };
 
