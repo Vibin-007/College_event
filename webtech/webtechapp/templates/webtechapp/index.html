@@ -548,7 +548,7 @@
             <img src="{% static 'webtechstyles/Images/rgf.png' %}" alt="RGF">
         </div>
         <div class="nav-links">
-            <button class="nav-btn" id="stu" onclick="openModal('studentModal')">Student</button>
+            <button class="nav-btn hidden" id="stu" onclick="openModal('studentModal')">Student</button>
             <button class="nav-btn" id="un" onclick="openModal('adminModal')">Admin</button>
             <a href="{% url 'admin_dashboard' %}" class="hidden" id="adminDashBtn">
                 <button class="nav-btn">Dashboard</button>
@@ -721,14 +721,15 @@
                     document.getElementById("adminDashBtn").classList.remove("hidden");
                     document.getElementById("logoutBtn").classList.remove("hidden");
                     document.getElementById("un").classList.add("hidden");
+                    document.getElementById("stu").classList.add("hidden");
                     closeModal('adminModal');
                     showPopup(`Welcome, ${data.username}!`);
                 } else {
-                    alert("Invalid Username or Password");
+                    showPopup("Invalid Username or Password");
                 }
             })
             .catch(err => {
-                alert("Login failed. Please try again.");
+                showPopup("Login failed. Please try again.");
             });
         }
 
@@ -755,11 +756,11 @@
                     closeModal("studentModal");
                     window.location.reload();
                 } else {
-                    alert("Invalid username or password");
+                    showPopup("Invalid username or password");
                 }
             })
             .catch(err => {
-                alert("Login failed. Please try again.");
+                showPopup("Login failed. Please try again.");
             });
         }
 
@@ -771,7 +772,7 @@
             const password = form.querySelector('input[name="reg_password"]').value;
             const confirmPass = document.getElementById('regConfirmPass');
             if (password !== confirmPass.value) {
-                alert("Passwords don't match!");
+                showPopup("Passwords don't match!");
                 return;
             }
             const res = await fetch('/api/students/', {
@@ -791,11 +792,12 @@
                 localStorage.setItem("email", email);
                 window.location.reload();
             } else {
-                alert(data.error || "Registration failed!");
+                showPopup(data.error || "Registration failed!");
             }
         }
 
         function logout() {
+            fetch('/api/logout/', { method: 'POST' });
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("role");
             localStorage.removeItem("email");
@@ -808,30 +810,12 @@
             showPopup("Successfully logged out.");
         }
 
-        async function checkRequireLogin() {
-            try {
-                const res = await fetch('/api/settings/');
-                const data = await res.json();
-                const requireLogin = data.require_login;
-                const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-                const role = localStorage.getItem("role");
-                
-                // Show student button only if require_login is ON AND user is NOT logged in as admin
-                if (requireLogin && !isLoggedIn) {
-                    document.getElementById("stu").classList.remove("hidden");
-                } else {
-                    document.getElementById("stu").classList.add("hidden");
-                }
-            } catch (err) {
-                console.error('Error loading settings:', err);
-            }
-        }
-
         window.onload = function () {
-            const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
             const role = localStorage.getItem("role");
+            const username = localStorage.getItem("username");
             
-            if (isLoggedIn) {
+            if (isLoggedIn === "true" && role && username) {
                 document.getElementById("logoutBtn").classList.remove("hidden");
                 document.getElementById("un").classList.add("hidden");
                 document.getElementById("stu").classList.add("hidden");
@@ -839,7 +823,6 @@
                     document.getElementById("adminDashBtn").classList.remove("hidden");
                 }
             }
-            checkRequireLogin();
         };
 
         document.querySelectorAll('.modal-overlay').forEach(modal => {

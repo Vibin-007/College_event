@@ -26,6 +26,7 @@ urlpatterns = [
     path("api/students/", views.api_students, name="api_students"),
     path("api/registrations/", views.api_registrations, name="api_registrations"),
     path("api/login/", views.api_login, name="api_login"),
+    path("api/logout/", views.api_logout, name="api_logout"),
     path("api/settings/", views.api_settings, name="api_settings"),
 ]
 if settings.DEBUG:

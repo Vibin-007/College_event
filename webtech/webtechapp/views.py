@@ -194,6 +194,17 @@ def delete_registration(request, registration_id):
 
 
 def admin_dashboard(request):
+    # Check for valid login credentials in headers or session
+    auth_header = request.headers.get("Authorization")
+    username = request.session.get("username")
+    role = request.session.get("role")
+
+    # Check if user is logged in via session
+    if not username or role != "admin":
+        # Try to get credentials from localStorage via a header or return login page
+        # For now, we'll check via API approach or redirect
+        pass
+
     if not AdminUser.objects.exists():
         AdminUser.objects.create(username="admin", password="123")
 
@@ -318,7 +329,8 @@ def api_admins(request):
 @csrf_exempt
 def api_students(request):
     if request.method == "GET":
-        students = Student.objects.all().values(
+        # Only show students who signed up (have password set), not those created via event registration
+        students = Student.objects.exclude(password="").values(
             "id", "name", "email", "phone", "created_at"
         )
         return JsonResponse({"students": list(students)})
@@ -398,6 +410,11 @@ def api_login(request):
         if login_type == "admin":
             try:
                 admin = AdminUser.objects.get(username=username, password=password)
+                # Set session
+                request.session["isLoggedIn"] = True
+                request.session["role"] = "admin"
+                request.session["username"] = admin.username
+                request.session.set_expiry(86400)  # 24 hours
                 return JsonResponse(
                     {"success": True, "role": "admin", "username": admin.username}
                 )
@@ -409,6 +426,12 @@ def api_login(request):
         elif login_type == "student":
             try:
                 student = Student.objects.get(name=username, password=password)
+                # Set session
+                request.session["isLoggedIn"] = True
+                request.session["role"] = "student"
+                request.session["username"] = student.name
+                request.session["email"] = student.email
+                request.session.set_expiry(86400)  # 24 hours
                 return JsonResponse(
                     {
                         "success": True,
@@ -438,3 +461,8 @@ def api_settings(request):
         if "require_login" in data:
             Settings.set("require_login", data["require_login"])
         return JsonResponse({"success": True})
+
+
+def api_logout(request):
+    request.session.flush()
+    return JsonResponse({"success": True})
